@@ -24,7 +24,7 @@ public class ItemBank : MonoBehaviour
         infoItem = new Item();
         infoRect = new Rect();
         showInfoBox = false;
-        showbank = false;
+        showbank = true;
         banksize = 3;
         itemdatabase = GameObject.FindGameObjectWithTag("Item Database").GetComponent<ItemDatabase>();
         for (int i = 0; i < banksize * banksize; i++)
@@ -82,16 +82,16 @@ public class ItemBank : MonoBehaviour
     {
 
         // Variables
-        int backgroundWidth = 220;
+        int backgroundWidth = 210;
         int backgroundHeight = 220;
-        int backgroundXOrigin = 60;
-        int backgroundYOrigin = 60;
+        int backgroundXOrigin = 125;
+        int backgroundYOrigin = 40;
         Rect backgroundRect = new Rect(backgroundXOrigin, backgroundYOrigin, backgroundWidth, backgroundHeight);
         GUI.Box(backgroundRect, "");
         int boxWidth = 60;
         int boxHeight = 60;
-        int xOrigin = 70;
-        int yOrigin = 70;
+        int xOrigin = 130;
+        int yOrigin = 45;
         InventoryController inventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryController>();
         Event e = Event.current;
 
@@ -124,7 +124,7 @@ public class ItemBank : MonoBehaviour
                 }
                 xOrigin += boxWidth + 10;
             }
-            xOrigin = 70;
+            xOrigin = 130;
             yOrigin += boxHeight + 10;
         }
 
@@ -143,23 +143,6 @@ public class ItemBank : MonoBehaviour
             }
         }
 
-        /*
-        // Draw upgrade area
-        int upgradeBoxWidth = 90;
-        int upgradeBoxHeight = 30;
-        Rect upgradeRect = new Rect(xOrigin, yOrigin, upgradeBoxWidth, upgradeBoxHeight);
-        string upgrade = "Upgrade";
-        GUI.Box(upgradeRect, upgrade);
-
-        // Draw disenchant area
-        xOrigin += 90;
-        int disenchantBoxWidth = 90;
-        int disenchantBoxHeight = 30;
-        Rect disenchantRect = new Rect(xOrigin, yOrigin, disenchantBoxWidth, disenchantBoxHeight);
-        string disenchant = "Disenchant";
-        GUI.Box(disenchantRect, disenchant);
-        */
-
     }
 
     // Creating the info string. (The string to be displayed when clicked on an item.)
@@ -167,6 +150,7 @@ public class ItemBank : MonoBehaviour
     {
         string info = item.name + "\nLevel: " + item.level + "\nType: " + item.type;
         info += "\nStat1: " + item.stat1 + "\nStat2: " + item.stat2 + "\nStat3: " + item.stat3;
+        info += '\n' + item.description;
         return info;
     }
 

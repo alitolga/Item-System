@@ -24,7 +24,7 @@ public class InventoryController : MonoBehaviour
         infoRect = new Rect();
         inventorySize = 3;
         showInfoBox = false;
-        showInventory = false;
+        showInventory = true;
 
         craftItems[0] = new Item();
         craftItems[0].name = "Dust";
@@ -94,14 +94,14 @@ public class InventoryController : MonoBehaviour
         // Variavles.
         int backgroundWidth = 265;
         int backgroundHeight = 265;
-        int backgroundXOrigin = 330;
-        int backgroundYOrigin = 60;
+        int backgroundXOrigin = 350;
+        int backgroundYOrigin = 40;
         Rect backgroundRect = new Rect(backgroundXOrigin, backgroundYOrigin, backgroundWidth, backgroundHeight);
         GUI.Box(backgroundRect, "");
         int boxWidth = 75;
         int boxHeight = 60;
-        int xOrigin = 340;
-        int yOrigin = 70;
+        int xOrigin = 360;
+        int yOrigin = 50;
         ItemBank itemBank = GameObject.FindGameObjectWithTag("Item Bank").GetComponent<ItemBank>();
         Event e = Event.current;
 
@@ -141,7 +141,9 @@ public class InventoryController : MonoBehaviour
                             // If it's an empty slot, take/buy it.
                             if (inventory[index].id == -1)
                             {
-                                inventory[index] = itemBank.draggedItem;
+                                ItemCreator itemfunctions = GameObject.FindGameObjectWithTag("Item Creator").GetComponent<ItemCreator>();
+                                itemfunctions.copyItems(inventory[index], itemBank.draggedItem);
+                                // inventory[index] = itemBank.draggedItem;
                             }
                             itemBank.draggingItem = false;
                         }
@@ -171,7 +173,7 @@ public class InventoryController : MonoBehaviour
 
                 xOrigin += boxWidth + 10;
             }
-            xOrigin = 340;
+            xOrigin = 360;
             yOrigin += boxHeight + 10;
         }
 
@@ -189,21 +191,27 @@ public class InventoryController : MonoBehaviour
             {
                 if(action == "Upgrade")
                 {
-                    inventory[draggedIndex].stat1 += 1;
-                    inventory[draggedIndex].stat2 += 1;
-                    inventory[draggedIndex].stat3 += 1;
-                    draggedItem = null;
-                    draggingItem = false;
-                    print("Item has been upgraded");
+                    if (draggedItem.type == Item.itemtype.Armor || draggedItem.type == Item.itemtype.Weapon)
+                    {
+                        inventory[draggedIndex].stat1 += 1;
+                        inventory[draggedIndex].stat2 += 1;
+                        inventory[draggedIndex].stat3 += 1;
+                        draggedItem = null;
+                        draggingItem = false;
+                        print("Item has been upgraded");
+                    }
                 }
                 if (action == "Disenchant")
                 {
-                    int k = Random.Range(0, 3);
-                    if (k == 2) { k = Random.Range(0, 3); }
-                    inventory[draggedIndex] = craftItems[k];
-                    draggedItem = null;
-                    draggingItem = false;
-                    print("Item has been disenchanted");
+                    if (draggedItem.type == Item.itemtype.Armor || draggedItem.type == Item.itemtype.Weapon || draggedItem.type == Item.itemtype.Consumable)
+                    {
+                        int k = Random.Range(0, 3);
+                        if (k == 2) { k = Random.Range(0, 3); }
+                        inventory[draggedIndex] = craftItems[k];
+                        draggedItem = null;
+                        draggingItem = false;
+                        print("Item has been disenchanted");
+                    }
                 }
                 if (action == "Remove")
                 {
@@ -267,15 +275,17 @@ public class InventoryController : MonoBehaviour
                 if (e.button == 0 && e.type == EventType.mouseUp)
                 {
                     // If I have been dragging from the bank.
-                    /*if (itemBank.draggingItem)
+                    /* if (itemBank.draggingItem)
                     {
                         // If it's an empty slot, take/buy it.
                         if (inventory[index].id == -1)
                         {
-                            inventory[index] = itemBank.draggedItem;
-                        }
+                            ItemCreator itemfunctions = GameObject.FindGameObjectWithTag("Item Creator").GetComponent<ItemCreator>();
+                            itemfunctions.copyItems(inventory[index], itemBank.draggedItem)
+                                // inventory[index] = itemBank.draggedItem;
+                            }
                         itemBank.draggingItem = false;
-                    }*/
+                    } */
 
                     // If I have been dragging from my Inventory.
                     if (draggingItem)
@@ -290,10 +300,37 @@ public class InventoryController : MonoBehaviour
                         // Else, switch the items.
                         else
                         {
-                            inventory[draggedIndex] = inventory[index];
-                            inventory[index] = draggedItem;
-                            draggedItem = null;
-                            draggingItem = false;
+                            if (index % 3 == 0)
+                            {
+                                if(draggedItem.type == Item.itemtype.Weapon)
+                                {
+                                    inventory[draggedIndex] = inventory[index];
+                                    inventory[index] = draggedItem;
+                                    draggedItem = null;
+                                    draggingItem = false;
+                                }
+                            }
+                            if (index % 3 == 1)
+                            {
+                                if (draggedItem.type == Item.itemtype.Armor)
+                                {
+                                    inventory[draggedIndex] = inventory[index];
+                                    inventory[index] = draggedItem;
+                                    draggedItem = null;
+                                    draggingItem = false;
+                                }
+                            }
+                            if (index % 3 == 2)
+                            {
+                                if (draggedItem.type == Item.itemtype.Consumable)
+                                {
+                                    inventory[draggedIndex] = inventory[index];
+                                    inventory[index] = draggedItem;
+                                    draggedItem = null;
+                                    draggingItem = false;
+                                }
+                            }
+                            
                         }
 
                     }

@@ -13,7 +13,7 @@ public class ItemCreator : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        showCreator = false;
+        showCreator = true;
         ID = 999;
     }
 
@@ -32,11 +32,13 @@ public class ItemCreator : MonoBehaviour {
     {
         if (showCreator)
         {
-            int xOrigin = 15;
-            int yOrigin = 10;
+            int xOrigin = 0;
+            int yOrigin = 0;
             int height = 22;
             int width = 110;
-            Rect guiRect = new Rect(10, 5, 120, 340);
+            Rect guiRect = new Rect(xOrigin, yOrigin, 120, 340);
+            xOrigin += 5;
+            yOrigin += 5;
             Rect textRect = new Rect(xOrigin, yOrigin, width, height);
             GUI.Box(guiRect, "");
 
@@ -127,7 +129,7 @@ public class ItemCreator : MonoBehaviour {
         }
     }
 
-    void copyItems(Item destination, Item source)
+    public void copyItems(Item destination, Item source)
     {
         destination.icon = source.icon;
         destination.level = source.level;
